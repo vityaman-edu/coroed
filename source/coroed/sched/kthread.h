@@ -1,12 +1,21 @@
 #pragma once
 
+// Use pthread on macOS/BSD, C11 threads elsewhere
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__)
+#define KTHREAD_PTHREAD
+#else
 #define KTHREAD_STDLIB
+#endif
 
 #include <stdint.h>
 #include <unistd.h>
 
 #ifdef KTHREAD_STDLIB
 #include <threads.h>
+#endif
+
+#ifdef KTHREAD_PTHREAD
+#include <pthread.h>
 #endif
 
 /**
@@ -63,6 +72,20 @@ kthread_id_t kthread_id();
  */
 struct kthread {
   thrd_t thrd;
+};
+
+#endif
+
+#ifdef KTHREAD_PTHREAD
+
+/**
+ * Реализация на pthread.
+ */
+struct kthread {
+  pthread_t thread;
+  kthread_routine routine;
+  void* argument;
+  int return_code;
 };
 
 #endif

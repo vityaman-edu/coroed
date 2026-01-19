@@ -15,10 +15,32 @@
 
 ## Build & Run
 
-Getting started.
+### Quick Start
+
+```bash
+# Сборка в Docker
+docker build --platform linux/amd64 -t coroed .
+
+# Запуск
+docker run --platform linux/amd64 --rm -it -p 8080:8080 -p 8081:8081 coroed
+
+# Внутри контейнера:
+./build/bin/app                 # тесты
+./build/bin/http_coroed         # HTTP сервер (корутины, порт 8080)
+./build/bin/http_threaded       # HTTP сервер (потоки, порт 8081)
+
+# Бенчмарк
+apt-get update && apt-get install -y wrk
+./benchmark.sh
+```
+
+📖 Подробный туториал: [TUTORIAL.md](./TUTORIAL.md)
+
+### Linux x64
 
 ```bash
 make clean && bear -- make compile && make
+./build/bin/app
 ```
 
 Run precommit checks locally.
