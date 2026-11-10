@@ -57,7 +57,7 @@ struct uthread* uthread_allocate() {
       /* fd     */ -1,
       /* offset */ 0
   );
-  if (!thread) {
+  if (thread == MAP_FAILED) {
     return NULL;
   }
 
